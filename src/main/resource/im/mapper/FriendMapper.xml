@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.vcc.im.mapper.IFriendMapper">
+       <resultMap id="resultMap" type="com.vcc.im.dao.Friend">
+          <id column="friend_id" jdbcType="INTEGER" property="friendId" />
+          <result column="friend_user_id" jdbcType="CHAR" property="friendUserId" />
+          <result column="firend_to_id" jdbcType="CHAR" property="firendToId" />
+          <result column="block" jdbcType="CHAR" property="block" />
+          <result column="tip" jdbcType="CHAR" property="tip" />
+          <result column="request" jdbcType="CHAR" property="request" />
+          <result column="response" jdbcType="CHAR" property="response" />
+          <result column="create_time" jdbcType="DATETIME" property="createTime" />
+          <result column="update_time" jdbcType="DATETIME" property="updateTime" />
+          <result column="monent" jdbcType="CHAR" property="monent" />
+       </resultMap>
+      <sql id="columnList">friend_id,friend_user_id,firend_to_id,block,tip,request,response,create_time,update_time,monent</sql>
+
+       <select id="getAll" parameterType="java.util.Map" resultMap="resultMap">
+           select 
+       <if test="field == null">
+           <include refid="columnList" />
+       </if>
+       <if test="field != null" >
+           ${field}
+         </if>
+       from ${tableName}
+       <where>
+           <foreach collection="condition" index="key" item="value">
+               ${key} ${value}
+           </foreach>
+       </where>
+       <if test="order != null">
+           order by ${order}
+       </if>
+       <if test="limit != 0">
+           <if test="offset != 0" >
+               limit ${offset},${limit}
+           </if>
+           <if test="offset == 0">
+               limit ${limit}
+           </if>
+       </if>
+
+     </select>
+
+       <select id="getCount" resultType="java.lang.Integer">
+           select 
+       <if test="field == null">
+count(id) 
+       </if>
+       <if test="field != null" >
+           ${field}
+         </if>
+       from ${tableName}
+       <where>
+           <foreach collection="condition" index="key" item="value">
+               ${key} ${value}
+           </foreach>
+       </where>
+       <if test="order != null">
+           order by ${order}
+       </if>
+       <if test="limit != 0">
+           <if test="offset != 0" >
+               limit ${offset},${limit}
+           </if>
+           <if test="offset == 0">
+               limit ${limit}
+           </if>
+       </if>
+
+     </select>
+
+       <insert id="insertList" parameterType="java.util.List" useGeneratedKeys="true"  keyProperty="friendId">
+         insert into ${tableName} (
+             friend_id,friend_user_id,firend_to_id,block,tip,request,response,create_time,monent
+         ) values 
+           <foreach collection="list" item="entity" index="index" separator=",">
+           (
+             #{entity.friendId},#{entity.friendUserId},#{entity.firendToId},#{entity.block},#{entity.tip},#{entity.request},#{entity.response},#{entity.createTime},#{entity.monent}
+         )
+           </foreach>
+     </insert>
+
+       <insert id="insertTo"  useGeneratedKeys="true"  keyProperty="entity.friendId">
+         insert into ${tableName} (
+             friend_id,friend_user_id,firend_to_id,block,tip,request,response,create_time,monent
+         ) values 
+           (
+             #{entity.friendId},#{entity.friendUserId},#{entity.firendToId},#{entity.block},#{entity.tip},#{entity.request},#{entity.response},#{entity.createTime},#{entity.monent}
+         )
+
+     </insert>
+
+       <update id="updateBatch"  parameterType="java.util.List">
+           <foreach collection="list" item="entity" index="index" separator="," >
+               update ${tableName} set 
+               <if test="field == null">
+                   friend_id=#{entity.friendId},friend_user_id=#{entity.friendUserId},firend_to_id=#{entity.firendToId},block=#{entity.block},tip=#{entity.tip},request=#{entity.request},response=#{entity.response},monent=#{entity.monent}
+           </if>
+              <if test="field != null" >
+                ${field}
+             </if>
+               <where>
+                <foreach collection="condition" index="key" item="value">
+                     ${key} ${value}
+                </foreach>
+            </where>
+           </foreach>
+     </update>
+
+       <update id="update"  >
+               update ${tableName} set 
+               <if test="field == null">
+                   friend_id=#{entity.friendId},friend_user_id=#{entity.friendUserId},firend_to_id=#{entity.firendToId},block=#{entity.block},tip=#{entity.tip},request=#{entity.request},response=#{entity.response},update_time=#{entity.updateTime},monent=#{entity.monent}
+           </if>
+              <if test="field != null" >
+                ${field}
+             </if>
+               <where>
+                <foreach collection="condition" index="key" item="value">
+                     ${key} ${value}
+                </foreach>
+            </where>
+     </update>
+
+       <update id="updateBatchById"  parameterType="java.util.List">
+           <foreach collection="list" item="entity" index="index" separator="," >
+               update ${tableName} set 
+               <if test="field == null">
+                   friend_id=#{entity.friendId},friend_user_id=#{entity.friendUserId},firend_to_id=#{entity.firendToId},block=#{entity.block},tip=#{entity.tip},request=#{entity.request},response=#{entity.response},monent=#{entity.monent}
+           </if>
+              <if test="field != null" >
+                ${field}
+             </if>
+            where
+                    friend_id = #{entity.friendId}
+           </foreach>
+     </update>
+
+       <update id="updateById"  >
+               update ${tableName} set 
+               <if test="field == null">
+                   friend_id=#{entity.friendId},friend_user_id=#{entity.friendUserId},firend_to_id=#{entity.firendToId},block=#{entity.block},tip=#{entity.tip},request=#{entity.request},response=#{entity.response},update_time=#{entity.updateTime},monent=#{entity.monent}
+           </if>
+              <if test="field != null" >
+                ${field}
+             </if>
+            where
+                    friend_id = #{entity.friendId}
+     </update>
+
+</mapper>

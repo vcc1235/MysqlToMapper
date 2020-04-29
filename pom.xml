@@ -9,20 +9,24 @@
     <version>1.0.0</version>
     <parent>
         <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-start-parent</artifactId>
+        <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.1.3.RELEASE</version>
     </parent>
     <dependencies>
         <dependency>
-            <groupId>com.xcc.sql</groupId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.vcc</groupId>
             <artifactId>sql</artifactId>
             <version>1.0.0</version>
         </dependency>
     </dependencies>
     <repositories>
-<!--        <repository>-->
-<!--            <id>com.vcc</id>-->
-<!--            <url>http://github.xalete.com/sql</url>-->
-<!--        </repository>-->
+        <repository>
+            <id>com.vcc</id>
+            <url>http://github.xalete.com/sql</url>
+        </repository>
     </repositories>
 </project>

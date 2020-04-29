@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.vcc.im.mapper.IRoomMapper">
+       <resultMap id="resultMap" type="com.vcc.im.dao.Room">
+          <id column="room_id" jdbcType="INTEGER" property="roomId" />
+          <result column="user_id" jdbcType="CHAR" property="userId" />
+          <result column="room_name" jdbcType="CHAR" property="roomName" />
+          <result column="room_type" jdbcType="CHAR" property="roomType" />
+          <result column="room_password" jdbcType="CHAR" property="roomPassword" />
+          <result column="room_sign" jdbcType="VARCHAR" property="roomSign" />
+          <result column="room_sum" jdbcType="BIGINT" property="roomSum" />
+          <result column="room_dec" jdbcType="VARCHAR" property="roomDec" />
+          <result column="room_file_list" jdbcType="TEXT" property="roomFileList" />
+          <result column="room_img_list" jdbcType="TEXT" property="roomImgList" />
+          <result column="create_time" jdbcType="DATETIME" property="createTime" />
+          <result column="update_time" jdbcType="DATETIME" property="updateTime" />
+       </resultMap>
+      <sql id="columnList">room_id,user_id,room_name,room_type,room_password,room_sign,room_sum,room_dec,room_file_list,room_img_list,create_time,update_time</sql>
+
+       <select id="getAll" parameterType="java.util.Map" resultMap="resultMap">
+           select 
+       <if test="field == null">
+           <include refid="columnList" />
+       </if>
+       <if test="field != null" >
+           ${field}
+         </if>
+       from ${tableName}
+       <where>
+           <foreach collection="condition" index="key" item="value">
+               ${key} ${value}
+           </foreach>
+       </where>
+       <if test="order != null">
+           order by ${order}
+       </if>
+       <if test="limit != 0">
+           <if test="offset != 0" >
+               limit ${offset},${limit}
+           </if>
+           <if test="offset == 0">
+               limit ${limit}
+           </if>
+       </if>
+
+     </select>
+
+       <select id="getCount" resultType="java.lang.Integer">
+           select 
+       <if test="field == null">
+count(id) 
+       </if>
+       <if test="field != null" >
+           ${field}
+         </if>
+       from ${tableName}
+       <where>
+           <foreach collection="condition" index="key" item="value">
+               ${key} ${value}
+           </foreach>
+       </where>
+       <if test="order != null">
+           order by ${order}
+       </if>
+       <if test="limit != 0">
+           <if test="offset != 0" >
+               limit ${offset},${limit}
+           </if>
+           <if test="offset == 0">
+               limit ${limit}
+           </if>
+       </if>
+
+     </select>
+
+       <insert id="insertList" parameterType="java.util.List" useGeneratedKeys="true"  keyProperty="roomId">
+         insert into ${tableName} (
+             room_id,user_id,room_name,room_type,room_password,room_sign,room_sum,room_dec,room_file_list,room_img_list,create_time
+         ) values 
+           <foreach collection="list" item="entity" index="index" separator=",">
+           (
+             #{entity.roomId},#{entity.userId},#{entity.roomName},#{entity.roomType},#{entity.roomPassword},#{entity.roomSign},#{entity.roomSum},#{entity.roomDec},#{entity.roomFileList},#{entity.roomImgList},#{entity.createTime}
+         )
+           </foreach>
+     </insert>
+
+       <insert id="insertTo"  useGeneratedKeys="true"  keyProperty="entity.roomId">
+         insert into ${tableName} (
+             room_id,user_id,room_name,room_type,room_password,room_sign,room_sum,room_dec,room_file_list,room_img_list,create_time
+         ) values 
+           (
+             #{entity.roomId},#{entity.userId},#{entity.roomName},#{entity.roomType},#{entity.roomPassword},#{entity.roomSign},#{entity.roomSum},#{entity.roomDec},#{entity.roomFileList},#{entity.roomImgList},#{entity.createTime}
+         )
+
+     </insert>
+
+       <update id="updateBatch"  parameterType="java.util.List">
+           <foreach collection="list" item="entity" index="index" separator="," >
+               update ${tableName} set 
+               <if test="field == null">
+                   room_id=#{entity.roomId},user_id=#{entity.userId},room_name=#{entity.roomName},room_type=#{entity.roomType},room_password=#{entity.roomPassword},room_sign=#{entity.roomSign},room_sum=#{entity.roomSum},room_dec=#{entity.roomDec},room_file_list=#{entity.roomFileList},room_img_list=#{entity.roomImgList}
+           </if>
+              <if test="field != null" >
+                ${field}
+             </if>
+               <where>
+                <foreach collection="condition" index="key" item="value">
+                     ${key} ${value}
+                </foreach>
+            </where>
+           </foreach>
+     </update>
+
+       <update id="update"  >
+               update ${tableName} set 
+               <if test="field == null">
+                   room_id=#{entity.roomId},user_id=#{entity.userId},room_name=#{entity.roomName},room_type=#{entity.roomType},room_password=#{entity.roomPassword},room_sign=#{entity.roomSign},room_sum=#{entity.roomSum},room_dec=#{entity.roomDec},room_file_list=#{entity.roomFileList},room_img_list=#{entity.roomImgList},update_time=#{entity.updateTime}
+           </if>
+              <if test="field != null" >
+                ${field}
+             </if>
+               <where>
+                <foreach collection="condition" index="key" item="value">
+                     ${key} ${value}
+                </foreach>
+            </where>
+     </update>
+
+       <update id="updateBatchById"  parameterType="java.util.List">
+           <foreach collection="list" item="entity" index="index" separator="," >
+               update ${tableName} set 
+               <if test="field == null">
+                   room_id=#{entity.roomId},user_id=#{entity.userId},room_name=#{entity.roomName},room_type=#{entity.roomType},room_password=#{entity.roomPassword},room_sign=#{entity.roomSign},room_sum=#{entity.roomSum},room_dec=#{entity.roomDec},room_file_list=#{entity.roomFileList},room_img_list=#{entity.roomImgList}
+           </if>
+              <if test="field != null" >
+                ${field}
+             </if>
+            where
+                    room_id = #{entity.roomId}
+           </foreach>
+     </update>
+
+       <update id="updateById"  >
+               update ${tableName} set 
+               <if test="field == null">
+                   room_id=#{entity.roomId},user_id=#{entity.userId},room_name=#{entity.roomName},room_type=#{entity.roomType},room_password=#{entity.roomPassword},room_sign=#{entity.roomSign},room_sum=#{entity.roomSum},room_dec=#{entity.roomDec},room_file_list=#{entity.roomFileList},room_img_list=#{entity.roomImgList},update_time=#{entity.updateTime}
+           </if>
+              <if test="field != null" >
+                ${field}
+             </if>
+            where
+                    room_id = #{entity.roomId}
+     </update>
+
+</mapper>

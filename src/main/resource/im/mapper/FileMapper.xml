@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.vcc.im.mapper.IFileMapper">
+       <resultMap id="resultMap" type="com.vcc.im.dao.File">
+          <id column="file_id" jdbcType="INTEGER" property="fileId" />
+          <result column="file_name" jdbcType="CHAR" property="fileName" />
+          <result column="file_url" jdbcType="CHAR" property="fileUrl" />
+          <result column="file_size" jdbcType="INTEGER" property="fileSize" />
+          <result column="file_type" jdbcType="CHAR" property="fileType" />
+          <result column="user_id" jdbcType="CHAR" property="userId" />
+          <result column="create_time" jdbcType="DATETIME" property="createTime" />
+          <result column="update_time" jdbcType="DATETIME" property="updateTime" />
+       </resultMap>
+      <sql id="columnList">file_id,file_name,file_url,file_size,file_type,user_id,create_time,update_time</sql>
+
+       <select id="getAll" parameterType="java.util.Map" resultMap="resultMap">
+           select 
+       <if test="field == null">
+           <include refid="columnList" />
+       </if>
+       <if test="field != null" >
+           ${field}
+         </if>
+       from ${tableName}
+       <where>
+           <foreach collection="condition" index="key" item="value">
+               ${key} ${value}
+           </foreach>
+       </where>
+       <if test="order != null">
+           order by ${order}
+       </if>
+       <if test="limit != 0">
+           <if test="offset != 0" >
+               limit ${offset},${limit}
+           </if>
+           <if test="offset == 0">
+               limit ${limit}
+           </if>
+       </if>
+
+     </select>
+
+       <select id="getCount" resultType="java.lang.Integer">
+           select 
+       <if test="field == null">
+count(id) 
+       </if>
+       <if test="field != null" >
+           ${field}
+         </if>
+       from ${tableName}
+       <where>
+           <foreach collection="condition" index="key" item="value">
+               ${key} ${value}
+           </foreach>
+       </where>
+       <if test="order != null">
+           order by ${order}
+       </if>
+       <if test="limit != 0">
+           <if test="offset != 0" >
+               limit ${offset},${limit}
+           </if>
+           <if test="offset == 0">
+               limit ${limit}
+           </if>
+       </if>
+
+     </select>
+
+       <insert id="insertList" parameterType="java.util.List" useGeneratedKeys="true"  keyProperty="fileId">
+         insert into ${tableName} (
+             file_id,file_name,file_url,file_size,file_type,user_id,create_time
+         ) values 
+           <foreach collection="list" item="entity" index="index" separator=",">
+           (
+             #{entity.fileId},#{entity.fileName},#{entity.fileUrl},#{entity.fileSize},#{entity.fileType},#{entity.userId},#{entity.createTime}
+         )
+           </foreach>
+     </insert>
+
+       <insert id="insertTo"  useGeneratedKeys="true"  keyProperty="entity.fileId">
+         insert into ${tableName} (
+             file_id,file_name,file_url,file_size,file_type,user_id,create_time
+         ) values 
+           (
+             #{entity.fileId},#{entity.fileName},#{entity.fileUrl},#{entity.fileSize},#{entity.fileType},#{entity.userId},#{entity.createTime}
+         )
+
+     </insert>
+
+       <update id="updateBatch"  parameterType="java.util.List">
+           <foreach collection="list" item="entity" index="index" separator="," >
+               update ${tableName} set 
+               <if test="field == null">
+                   file_id=#{entity.fileId},file_name=#{entity.fileName},file_url=#{entity.fileUrl},file_size=#{entity.fileSize},file_type=#{entity.fileType},user_id=#{entity.userId}
+           </if>
+              <if test="field != null" >
+                ${field}
+             </if>
+               <where>
+                <foreach collection="condition" index="key" item="value">
+                     ${key} ${value}
+                </foreach>
+            </where>
+           </foreach>
+     </update>
+
+       <update id="update"  >
+               update ${tableName} set 
+               <if test="field == null">
+                   file_id=#{entity.fileId},file_name=#{entity.fileName},file_url=#{entity.fileUrl},file_size=#{entity.fileSize},file_type=#{entity.fileType},user_id=#{entity.userId},update_time=#{entity.updateTime}
+           </if>
+              <if test="field != null" >
+                ${field}
+             </if>
+               <where>
+                <foreach collection="condition" index="key" item="value">
+                     ${key} ${value}
+                </foreach>
+            </where>
+     </update>
+
+       <update id="updateBatchById"  parameterType="java.util.List">
+           <foreach collection="list" item="entity" index="index" separator="," >
+               update ${tableName} set 
+               <if test="field == null">
+                   file_id=#{entity.fileId},file_name=#{entity.fileName},file_url=#{entity.fileUrl},file_size=#{entity.fileSize},file_type=#{entity.fileType},user_id=#{entity.userId}
+           </if>
+              <if test="field != null" >
+                ${field}
+             </if>
+            where
+                    file_id = #{entity.fileId}
+           </foreach>
+     </update>
+
+       <update id="updateById"  >
+               update ${tableName} set 
+               <if test="field == null">
+                   file_id=#{entity.fileId},file_name=#{entity.fileName},file_url=#{entity.fileUrl},file_size=#{entity.fileSize},file_type=#{entity.fileType},user_id=#{entity.userId},update_time=#{entity.updateTime}
+           </if>
+              <if test="field != null" >
+                ${field}
+             </if>
+            where
+                    file_id = #{entity.fileId}
+     </update>
+
+</mapper>
